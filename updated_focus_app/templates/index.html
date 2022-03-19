@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row text-center mb-5">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 border-white bg-white rounded py-4">
+            <h1 class="font-weight-bold">Focus Timer</h1>
+            <h3>A countdown timer based on the Pomodoro technique.</h3>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+    <!-- Settings Buttons -->
+    <div class="row text-center">
+        <!-- Button Options: Set Focus Time -->
+        <div class="col-sm-6">
+            <div class="m-2 py-5 bg-light rounded-lg shadow">
+                <div class="mb-4"><h6>Choose your focus time amount:</h6></div>
+                {% if current_focus == 15 %}
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[0] }}" class="px-5 py-2 btn btn-secondary">15 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[1] }}" class="px-5 py-2 btn btn-outline-secondary">25 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[2] }}" class="px-5 py-2 btn btn-outline-secondary">50 Minutes</button></form></div>
+                {% elif current_focus == 25 %}
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[0] }}" class="px-5 py-2 btn btn-outline-secondary">15 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[1] }}" class="px-5 py-2 btn btn-secondary">25 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[2] }}" class="px-5 py-2 btn btn-outline-secondary">50 Minutes</button></form></div>
+                {% else %}
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[0] }}" class="px-5 py-2 btn btn-outline-secondary">15 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[1] }}" class="px-5 py-2 btn btn-outline-secondary">25 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-focus" value="{{ focus_options[2] }}" class="px-5 py-2 btn btn-secondary">50 Minutes</button></form></div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Button Options: Set Break Time -->
+        <div class="col-sm-6">
+            <div class="m-2 py-5 bg-light rounded-lg shadow">
+                <div class="mb-4"><h6>Choose your break time amount:</h6></div>
+                {% if current_break == 3 %}
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[0] }}" class="px-5 py-2 btn btn-secondary">3 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[1] }}" class="px-5 py-2 btn btn-outline-secondary">5 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[2] }}" class="px-5 py-2 btn btn-outline-secondary">10 Minutes</button></form></div>
+                {% elif current_break == 5 %}
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[0] }}" class="px-5 py-2 btn btn-outline-secondary">3 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[1] }}" class="px-5 py-2 btn btn-secondary">5 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[2] }}" class="px-5 py-2 btn btn-outline-secondary">10 Minutes</button></form></div>
+                {% else %}
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[0] }}" class="px-5 py-2 btn btn-outline-secondary">3 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[1] }}" class="px-5 py-2 btn btn-outline-secondary">5 Minutes</button></form></div>
+                    <div class="my-2"><form action="" method="POST"><button type="submit" name="set-break" value="{{ break_options[2] }}" class="px-5 py-2 btn btn-secondary">10 Minutes</button></form></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Start Timer and To-Do List Buttons-->
+    <div class="row text-center mt-5">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6 mt-3">
+            <div class="my-2"><form action="{{ url_for('timer') }}"><button type="submit" class="px-5 py-2 btn btn-success">Start Timer</button></form></div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <!-- Background Image Function -->
+    <script>
+        var background_images = {{ images|safe }};
+        function set_background()   {
+            var random_var = Math.floor(Math.random() * background_images.length);
+            var image = background_images[random_var];
+            document.body.style.backgroundImage = "url(' " + image + " ')";
+        }
+    </script>
+{% endblock content %}

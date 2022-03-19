@@ -1,0 +1,204 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row text-left">
+        <button class="btn btn-dark" onclick="set_background()">Change Background</button>
+    </div>
+    <div class="row text-center mb-2">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 border border-white bg-white rounded py-4">
+            <h1 class="font-weight-bold">Focus Timer</h1>
+            <h3>A countdown timer based on the Pomodoro technique.</h3>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+    <!-- Background Image Function -->
+    <script>
+        var background_images = {{ images|safe }};
+        function set_background()   {
+            var random_var = Math.floor(Math.random() * background_images.length);
+            var image = background_images[random_var];
+            document.body.style.backgroundImage = "url(' " + image + " ')";
+        }
+    </script>
+    <div class="row text-center align-items-center">
+        <!-- Countdown Timer Base -->
+        <div class="col-sm-6">
+            <div class="bg-dark text-white rounded shadow py-3 px-4">
+                <div class="pt-5">
+                    <h2>Countdown Timer</h2>
+                </div>
+                <div class="py-3 my-4 mx-5 border border-white rounded">
+                    <h1 id="time"></h1>
+                    <h4 id="description"></h4>
+                </div>
+                <div class="mt-3 mb-5">
+                    <button onclick="pause()" class="px-4 py-2 btn btn-warning">Pause</button>
+                    <button onclick="restart()" class="px-4 py-2 btn btn-success">Continue</button>
+                    <button onclick="skip_timer()" class="px-4 py-2 btn btn-primary">Skip</button>
+                </div>
+            </div>
+        </div>
+        <!-- To-Do List -->
+        <div class="col-sm-6">
+            <div class="bg-light rounded shadow py-3 px-4">
+                <div class="py-2">
+                    <h2>To-Do List</h2>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="bg-light border-0 input-group-text">
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                        <input type="text" class="bg-light border-0 form-control" placeholder="Type task here...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Return to home page -->
+        <div class="col-sm-12">
+            <div class="mt-5"><button onclick="return_home()" class="px-5 py-2 btn btn-danger">Return to Homepage</button></div>
+        </div>
+    </div>
+    <!-- Script to run countdown timer -->
+    <script>
+        // Global variables
+        var is_paused = 0;
+        var is_focus = 1;
+        var leftover = set_time();
+        var timer_one = setInterval(function() {begin(leftover);}, 1000);
+
+        // Set the current timer + update the inner HTML
+        function set_time() {
+            document.getElementById("time").innerHTML = "Updating...";
+            if (is_focus == 1)    {
+                var focus_left = {{ focus_time|safe }};
+                document.getElementById("description").innerHTML = "Focus";
+                return focus_left;
+            } else {
+                var break_left = {{ break_time|safe }};
+                document.getElementById("description").innerHTML = "Break";
+                return break_left;
+            }
+        }
+
+        // Converts current time in milliseconds to minute and second format
+        // Calculations referenced from https://stackoverflow.com/questions/21294302/converting-milliseconds-to-minutes-and-seconds-with-javascript
+        function convert(t_milli) {
+            var min = Math.floor(t_milli / 60000);
+            var sec = ((t_milli % 60000) / 1000).toFixed(0);
+            return (sec == 60 ? (min + 1) + ":00" : min + ":" + (sec < 10 ? "0" : "") + sec);
+        }
+
+        // Main countdown function
+        function begin(remaining) {
+            var display_val = convert(remaining);
+            document.getElementById("time").innerHTML = display_val;
+            if (leftover == 0)  {
+                is_focus = (is_focus == 1) ? 0 : 1;
+                clearInterval(timer_one);
+                document.getElementById("time").innerHTML = "Updating...";
+                document.getElementById("description").innerHTML = "Timer Complete! Next timer will begin in 5 seconds...";
+                setTimeout(function()   {
+                    leftover = set_time();
+                    timer_one = setInterval(function() {begin(leftover);}, 1000);
+                }, 5000);
+            } else {
+                leftover -= 1000;
+            }
+        }
+
+        // Pause the current countdown
+        function pause()    {
+            if (is_paused == 0) {
+                is_paused = 1;
+                temp = leftover;
+                leftover = temp;
+                clearInterval(timer_one);
+            }
+        }
+
+        // Restart a paused countdown
+        function restart() {
+            if (is_paused == 1) {
+                is_paused = 0;
+                timer_one = setInterval(function() {begin(leftover);}, 1000);
+            }
+        }
+
+        // Skip the current timer
+        function skip_timer()   {
+            if (confirm("Are you sure you want to skip the current timer? If you do so, the next focus or break timer will begin.") == true)  {
+                document.getElementById("time").innerHTML = "Updating...";
+                clearInterval(timer_one);
+                is_focus = (is_focus == 1) ? 0 : 1;
+                leftover = set_time();
+                timer_one = setInterval(function() {begin(leftover);}, 1000);
+            }
+        }
+
+        // Return to home page
+        function return_home()  {
+            if (confirm("Are you sure you want to go back? The existing timer will be canceled, and the to-do list will be erased.") == true)  {
+                history.go(-1);
+            } else {
+                return false;
+            }
+        }
+    </script>
+{% endblock content %}

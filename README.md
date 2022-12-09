@@ -1,6 +1,6 @@
 # Pomodoro App Viewing Instructions:
 To view the app, please do the following:
-1. Unzip 'pomodoro-app.zip'
+1. Unzip 'pomodoro-final-app.zip'
 2. Navigate to the 'app.py' file
 3. Run the file in a Python IDE and click the generated local link
 # Weather Microservice Viewing Instructions:
